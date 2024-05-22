@@ -1,0 +1,41 @@
+const mongoose = require("mongoose");
+
+const questionSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  questionType: {
+    type: String,
+    required: true,
+  },
+  questionID: {
+    type: Number,
+    required: true
+  },
+  nextQuestion: {
+    type: [Number],
+    required: true
+  },
+  shortText: {
+    type: String,
+  },
+  longText: {
+    type: String,
+  },
+  correctOption: {
+    type: String,
+  },
+  options: {
+    type: Object,
+  },
+  exam: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "exams",
+  },
+}, {
+    timestamps: true,
+});
+
+const Question = mongoose.models.questions || mongoose.model("questions", questionSchema);
+export default Question;
