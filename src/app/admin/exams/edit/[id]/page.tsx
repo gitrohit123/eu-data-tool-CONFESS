@@ -5,7 +5,7 @@ import Exam from "@/models/examModels";
 import React from "react";
 import EditExamLayout from "../../examComponents/EditExamLayout";
 import Question from "@/models/questionModels";
-import { connect } from "../../../../dbConfig/dbConfig";
+import { connect } from "../../../../../dbConfig/dbConfig";
 
 type Props = {
   params: {

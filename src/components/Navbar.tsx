@@ -20,6 +20,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useAuth from "@/context/auth";
+import Cookies from "js-cookie";
 
 type NavbarProps = {};
 
@@ -27,19 +28,21 @@ export default function NavigationBar({}: NavbarProps) {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isAuthenticated, user, setUser } = useAuth();
-  console.log(isAuthenticated, user)
 
   const links = [
     { name: "Home", href: "/" },
-    { name: "Exams", href: "/exams", admin: true },
-    { name: "Reports", href: "/reports", admin: true },
+    { name: "Exams", href: "/admin/exams", admin: true },
+    { name: "Reports", href: "/admin/reports", admin: true },
   ];
 
   const logout = async () => {
     try {
-      await axios.get("/api/users/logout");
-      toast.success("Logged out successfully");
       setUser(null);
+      await axios.get("/api/users/logout");
+      Cookies.remove("name");
+      Cookies.remove("token");
+      Cookies.remove("admin");
+      toast.success("Logged out successfully");
       router.push("/login");
     } catch (error: any) {
       console.log(error);

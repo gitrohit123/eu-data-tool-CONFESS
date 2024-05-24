@@ -1,6 +1,6 @@
-export const maxDuration = 50; 
+export const maxDuration = 50;
 import Section from "@/components/Section";
-import TableDisplay from "@/app/exams/examComponents/ExamTableDisplay";
+import TableDisplay from "@/app/admin/exams/examComponents/ExamTableDisplay";
 import Exam from "@/models/examModels";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
@@ -46,7 +46,7 @@ const Activities = async (props: Props) => {
 
   return (
     <Section className="flex-col">
-      <Link href="/exams/create" className="place-self-end">
+      <Link href="/admin/exams/create" className="place-self-end">
         <Button color="success" variant="ghost">
           Create Exam
         </Button>

@@ -70,20 +70,20 @@ const EditExamLayout = ({ exam, questionData }: Props) => {
   };
 
   const handleCancel = () => {
-    router.push("/exams");
+    router.push("/admin/exams");
   };
 
   const handleSaveExam = async () => {
     try {
       let response;
       if (exam) {
-        response = await axios.put(`/api/exams/${exam?._id}`, examData);
+        response = await axios.put(`/api/admin/exams/${exam?._id}`, examData);
       } else {
-        response = await axios.post("/api/exams", examData);
+        response = await axios.post("/api/admin/exams", examData);
       }
       if (response.status === 200) {
         toast.success("Exam saved successfully");
-        router.push("/exams");
+        router.push("/admin/exams");
       }
     } catch (error: any) {
       console.log(error);
@@ -93,7 +93,7 @@ const EditExamLayout = ({ exam, questionData }: Props) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`/api/questions/${id}`);
+      await axios.delete(`/api/admin/questions/${id}`);
       toast.success("Question deleted successfully");
       fetchQuestions();
     } catch (error: any) {
@@ -122,14 +122,14 @@ const EditExamLayout = ({ exam, questionData }: Props) => {
       case "actions":
         return (
           <div className="relative flex items-center gap-2 place-items-center place-content-center">
-            <Tooltip content="Edit exam">
+            <Tooltip content="Edit question">
               <Button onClick={() => handleEdit(question)}>
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                   <PencilSquareIcon className="size-7" />
                 </span>
               </Button>
             </Tooltip>
-            <Tooltip color="danger" content="Delete exam">
+            <Tooltip color="danger" content="Delete question">
               <Button onClick={() => handleDelete(question._id)}>
                 <span className="text-lg text-danger cursor-pointer active:opacity-50">
                   <TrashIcon className="size-7" />

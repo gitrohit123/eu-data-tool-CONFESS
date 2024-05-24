@@ -24,46 +24,20 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const userId = await getTokenData(request);
+    const userId = await getTokenData(
+      request.cookies.get("token")?.value || ""
+    );
     const { answers } = await request.json();
     const answerData = answers.map((answer: any) => {
       return {
         question: new mongoose.Types.ObjectId(answer._id.toString()),
-        user: new mongoose.Types.ObjectId(userId),
-        answer: answer.answer,
+        answer: answer.answer || "result",
         exam: new mongoose.Types.ObjectId(params.id),
+        user: new mongoose.Types.ObjectId(userId),
       };
     });
+    console.log(params.id, answerData);
     const response = await Answer.insertMany(answerData);
-    return NextResponse.json({ data: response, status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message, status: 500 });
-  }
-}
-
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    if (!request.body) {
-      return NextResponse.json({ error: "Invalid request", status: 400 });
-    }
-    const body = await request.json();
-    console.log(body);
-    const response = await Exam.updateOne({ _id: params.id }, body);
-    return NextResponse.json({ data: response, status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message, status: 500 });
-  }
-}
-
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const response = await Exam.deleteOne({ _id: params.id });
     return NextResponse.json({ data: response, status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });

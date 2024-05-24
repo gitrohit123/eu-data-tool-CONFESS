@@ -2,7 +2,7 @@ export const maxDuration = 50;
 import Exam from "@/models/examModels";
 import React from "react";
 import EditExamLayout from "../examComponents/EditExamLayout";
-import { connect } from "../../../dbConfig/dbConfig";
+import { connect } from "../../../../dbConfig/dbConfig";
 
 type Props = {
   params: {

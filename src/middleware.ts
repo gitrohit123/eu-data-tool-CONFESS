@@ -14,10 +14,9 @@ export function middleware(request: NextRequest) {
   }
   if (!isPublicPath && token) {
     const admin = request.cookies.get("admin")?.value === "true" || false;
-    const isNotAdminPath = path === "/" || path === "/exams/:id";
-    console.log(!admin && !isNotAdminPath, !admin, !isNotAdminPath);
-    if (!isNotAdminPath && !admin) {
-      console.log(isNotAdminPath);
+    const isAdminPath =
+      path.startsWith("/admin/") || path.startsWith("/api/admin/");
+    if (isAdminPath && !admin) {
       return NextResponse.redirect(new URL("/", request.nextUrl));
     }
   }
@@ -30,8 +29,7 @@ export const config = {
     "/login",
     "/signup",
     "/profile",
-    "/exams/([^/.]*)",
-    "/reports",
-    "/exams/:id*",
+    "/admin/([^/.]*)",
+    "/api/admin/([^/.]*)",
   ],
 };

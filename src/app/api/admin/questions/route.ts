@@ -10,9 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid request", status: 400 });
     }
     const body = await request.json();
-    console.log(body);
     const question = new Question(body);
-    console.log(question);
     const savedQuestion = await question.save();
     return NextResponse.json({ data: savedQuestion, status: 200 });
   } catch (error: any) {

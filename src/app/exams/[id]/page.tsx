@@ -2,7 +2,7 @@
 export const maxDuration = 50;
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Instructions from "../examComponents/Instructions";
+import Instructions from "../../admin/exams/examComponents/Instructions";
 import {
   Button,
   Input,
@@ -12,7 +12,6 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import Section from "@/components/Section";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import CenterSection from "@/components/CenterSection";
@@ -140,7 +139,19 @@ const WriteExam = ({ params }: Props) => {
               </div>
               <div className="flex flex-col text-justify">
                 <h1 className="text-xl my-3">
-                  {questionStack.length + 1 + ". " + currentQuestion.name}
+                  <p>
+                    {currentQuestion.questionType === "Blank"
+                      ? ""
+                      : `Question ${questionStack.length + 1} :`}
+                  </p>
+                  {
+                    <div
+                      className="mt-5"
+                      dangerouslySetInnerHTML={{
+                        __html: `${currentQuestion.name}`,
+                      }}
+                    />
+                  }
                 </h1>
                 {currentQuestion.questionType === "MCQ" ? (
                   <>

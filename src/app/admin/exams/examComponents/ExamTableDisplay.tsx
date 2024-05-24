@@ -27,9 +27,9 @@ export default function TableDisplay({ exams, columns, className }: Props) {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`/api/exams/${id}`);
+      await axios.delete(`/api/admin/exams/${id}`);
       toast.success("Exam deleted successfully");
-      router.push("/exams");
+      router.push("/admin/exams");
     } catch (error: any) {
       console.log(error);
       toast.error(error.message);
@@ -42,7 +42,7 @@ export default function TableDisplay({ exams, columns, className }: Props) {
         return (
           <div className="relative flex items-center gap-2 place-items-center place-content-center">
             <Tooltip content="Edit exam">
-              <Link href={"/exams/edit/" + exam.id}>
+              <Link href={"/admin/exams/edit/" + exam.id}>
                 <Button>
                   <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                     <PencilSquareIcon className="size-7" />

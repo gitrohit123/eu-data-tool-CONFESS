@@ -14,7 +14,7 @@ const Login = (props: Props) => {
   const router = useRouter();
   const [user, setUserData] = React.useState({ email: "", password: "" });
   const [isVisible, setIsVisible] = React.useState(false);
-  const {setUser} = useAuth();
+  const { setUser } = useAuth();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
@@ -25,7 +25,11 @@ const Login = (props: Props) => {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
       if (response.status === 200) {
-        const userInfo = await axios.get("/api/users/user");
+        const userInfo = await axios.get("/api/users/user", {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
         const userData = userInfo.data.data;
         setUser(userData);
         router.push("/");

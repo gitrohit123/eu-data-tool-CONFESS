@@ -67,11 +67,11 @@ export default function QuestionModal({
         question.nextQuestion = question.nextQuestion.split(",");
       if (questionData) {
         response = await axios.put(
-          `/api/questions/${questionData._id}`,
+          `/api/admin/questions/${questionData._id}`,
           question
         );
       } else {
-        response = await axios.post(`/api/questions`, question);
+        response = await axios.post(`/api/admin/questions`, question);
       }
       if (response.status === 200) {
         toast.success("Question saved successfully");

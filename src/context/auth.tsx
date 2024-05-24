@@ -6,7 +6,7 @@ import axios from "axios";
 const AuthContext = createContext<any>({
   isAuthenticated: false,
   user: null,
-  setUser: null
+  setUser: null,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,9 +23,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loadUserFromCookies();
   }, []);
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated: !!user, user, setUser}}
-    >
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, setUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -6,7 +6,7 @@ export async function GET() {
       message: "Logout successful",
       status: 200,
     });
-    response.cookies.set("token", "", { httpOnly: true });
+    response.cookies.delete("token");
     response.cookies.delete("name");
     response.cookies.delete("admin");
     return response;
