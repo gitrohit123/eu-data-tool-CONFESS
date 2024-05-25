@@ -66,12 +66,6 @@ const WriteExam = ({ params }: Props) => {
 
   const startExam = () => {
     setStartScreen(false);
-    const interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(interval);
-    }, exam.duration * 1000);
   };
 
   const handleQuestionNavigation = (previous: number) => {
@@ -132,18 +126,9 @@ const WriteExam = ({ params }: Props) => {
             <div className=" w-full min-h-[60vh] mt-10 h-full justify-between self-start flex flex-col ">
               <div className="flex flex-row justify-between place-content-center place-items-center">
                 <h1 className="text-4xl">{exam.name}</h1>
-                <div className="flex flex-row">
-                  <ClockIcon className="size-7 mr-2" />
-                  <h1 className="text-2xl">{timer}</h1>
-                </div>
               </div>
               <div className="flex flex-col text-justify">
                 <h1 className="text-xl my-3">
-                  <p>
-                    {currentQuestion.questionType === "Blank"
-                      ? ""
-                      : `Question ${questionStack.length + 1} :`}
-                  </p>
                   {
                     <div
                       className="mt-5"
