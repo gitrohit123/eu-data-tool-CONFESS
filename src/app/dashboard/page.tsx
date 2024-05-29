@@ -224,15 +224,6 @@ const Dashboard = (props: Props) => {
                   width: '20px',
                   height: '20px',
                   borderRadius: '50%', // to make it a circle
-                  backgroundColor: EvaluationResult.DOC_MISSING,
-                }}></div>
-                <div className={"text-xs"} style={{ margin: '10px' }}>Criteria met, but documentation missing</div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '50%', // to make it a circle
                   backgroundColor: EvaluationResult.NOT_MET,
                 }}></div>
                 <div className={"text-xs"} style={{ margin: '10px' }}>Criteria not met</div>
@@ -244,7 +235,7 @@ const Dashboard = (props: Props) => {
                   borderRadius: '50%', // to make it a circle
                   backgroundColor: EvaluationResult.NOT_ASSESSABLE,
                 }}></div>
-                <div className={"text-xs"} style={{ margin: '10px' }}>Criteria not assesssable</div>
+                <div className={"text-xs"} style={{ margin: '10px' }}>Criteria not assessable</div>
               </div>
             </div>
 
@@ -259,17 +250,17 @@ const Dashboard = (props: Props) => {
         activityName={"Activity 1 - Electricity Generation Using Solar Photovoltaic Technology"}
         substentialContribution={EvaluationResult.MET}
         adaption={EvaluationResult.NOT_MET}
-        water={EvaluationResult.DOC_MISSING}
-        circularEconomy={EvaluationResult.DOC_MISSING}
+        water={EvaluationResult.MET}
+        circularEconomy={EvaluationResult.MET}
         pollution={EvaluationResult.MET}
       />
       <br />
       <ActivityDashboardCard
         activityName={"Activity 2 - Electricity generation from wind power"}
-        substentialContribution={EvaluationResult.MET}
+        substentialContribution={EvaluationResult.NOT_MET}
         adaption={EvaluationResult.NOT_MET}
-        water={EvaluationResult.DOC_MISSING}
-        circularEconomy={EvaluationResult.DOC_MISSING}
+        water={EvaluationResult.MET}
+        circularEconomy={EvaluationResult.NOT_MET}
         pollution={EvaluationResult.MET}
       />
       <br />
@@ -277,9 +268,9 @@ const Dashboard = (props: Props) => {
         activityName={"Activity 3 - Electricity generation from wind power"}
         substentialContribution={EvaluationResult.MET}
         adaption={EvaluationResult.NOT_MET}
-        water={EvaluationResult.DOC_MISSING}
-        circularEconomy={EvaluationResult.DOC_MISSING}
-        pollution={EvaluationResult.MET}
+        water={EvaluationResult.NOT_MET}
+        circularEconomy={EvaluationResult.MET}
+        pollution={EvaluationResult.NOT_MET}
       />
 
     </Section>

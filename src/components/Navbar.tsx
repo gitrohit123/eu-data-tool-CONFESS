@@ -31,6 +31,7 @@ export default function NavigationBar({}: NavbarProps) {
 
   const links = [
     { name: "Home", href: "/" },
+    { name: "Dashboard", href: "/dashboard"},
     { name: "Exams", href: "/admin/exams", admin: true },
     { name: "Reports", href: "/admin/reports", admin: true },
   ];
