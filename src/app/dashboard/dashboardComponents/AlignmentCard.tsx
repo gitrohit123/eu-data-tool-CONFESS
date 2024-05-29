@@ -1,7 +1,7 @@
 import React from "react";
 
-import MultiColorCircularProgress from '@/components/MultiColorCircularProgress'; 
-import {AlignmentColors} from '@/components/MultiColorCircularProgress'; 
+import MultiColorCircularProgress from '@/app/dashboard/dashboardComponents/MultiColorCircularProgress'; 
+import {AlignmentColors} from '@/app/dashboard/dashboardComponents/MultiColorCircularProgress'; 
 import {
   CardBody,
   Card,
@@ -13,9 +13,10 @@ type Props = {
     notAlignedActivitiesTotal: number;
     notEligibleActivitiesTotal: number;
     total: number;
+    showEuro: boolean;
   };
 
-const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal, notEligibleActivitiesTotal, total}: Props) => {
+const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal, notEligibleActivitiesTotal, total, showEuro}: Props) => {
 
   return (
         <Card className={"mt-[30px] w-[290px] h-[300px]"}>
@@ -45,7 +46,7 @@ const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal
                   }}></div>
                   Aligned
                 </div>
-                <div>{alignedActivitiesTotal} € ({Math.round(alignedActivitiesTotal/total*100)}%)</div>
+                <div>{alignedActivitiesTotal} {showEuro? '€' : ''} ({Math.round(alignedActivitiesTotal/total*100)}%)</div>
               </div>
               <div className={"text-xs"} style={{display:'flex', margin: '5px', justifyContent:'space-between'}}>
               <div style={{display: 'flex', alignItems: 'center'}}>
@@ -58,7 +59,7 @@ const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal
                   }}></div>
                   Not aligned but eligible
                 </div>
-                <div>{notAlignedActivitiesTotal} € ({Math.round(notAlignedActivitiesTotal/total*100)}%)</div>
+                <div>{notAlignedActivitiesTotal} {showEuro? '€' : ''} ({Math.round(notAlignedActivitiesTotal/total*100)}%)</div>
               </div>
               <div className={"text-xs"} style={{display:'flex', margin: '5px', justifyContent:'space-between'}}>
               <div style={{display: 'flex', alignItems: 'center'}}>
@@ -71,7 +72,7 @@ const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal
                   }}></div>
                   Not eligible
                 </div>
-                <div>{notEligibleActivitiesTotal} € ({Math.round(notEligibleActivitiesTotal/total*100)}%)</div>
+                <div>{notEligibleActivitiesTotal} {showEuro? '€' : ''} ({Math.round(notEligibleActivitiesTotal/total*100)}%)</div>
               </div>
               </CardBody>
           </Card>

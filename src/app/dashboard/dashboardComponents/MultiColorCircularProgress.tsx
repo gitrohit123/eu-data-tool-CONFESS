@@ -16,6 +16,7 @@ const MultiColorCircularProgress = ({ aligned, notAligned, notEligible }: Props)
   const size = 70; // Diameter of the circle
   const strokeWidth = 10; // Width of the circle's stroke
   const radius = (size - strokeWidth) / 2; // Radius of the circle
+
   const circumference = 2 * Math.PI * radius; // Circumference of the circle
 
   // Percentages for each segment (total should be 100)
@@ -35,18 +36,18 @@ const MultiColorCircularProgress = ({ aligned, notAligned, notEligible }: Props)
         const dashOffset = circumference - (cumulativePercentage / 100) * circumference;
         cumulativePercentage += segment.percentage;
         return (
-          <circle
-            key={index}
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={segment.color}
-            strokeWidth={strokeWidth}
-            strokeDasharray={dashArray}
-            strokeDashoffset={dashOffset}
-            transform={`rotate(-90 ${size / 2} ${size / 2})`}
-          />
+            <circle
+              key={index}
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              fill="none"
+              stroke={segment.color}
+              strokeWidth={strokeWidth}
+              strokeDasharray={dashArray}
+              strokeDashoffset={dashOffset}
+              transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            />
         );
       })}
     </svg>
