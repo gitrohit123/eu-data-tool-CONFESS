@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig/dbConfig";
 import Answer from "@/models/answerModels";
-import Exam from "@/models/examModels";
 import mongoose from "mongoose";
 
 
