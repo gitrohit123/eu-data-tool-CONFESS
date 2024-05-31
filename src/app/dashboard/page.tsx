@@ -21,12 +21,12 @@ import ActivityDashboardCard from "@/app/dashboard/dashboardComponents/ActivityD
 import { EvaluationResult } from "@/app/dashboard/dashboardComponents/ActivityDashboardCard";
 import useAuth from "@/context/auth";
 import axios from "axios";
-import { 
-  doesActivityMeetSC, 
-  doesActivityMeetAdaption, 
-  doesActivityMeetWater, 
-  doesActivityMeetCE, 
-  doesActivityMeetPollution, 
+import {
+  doesActivityMeetSC,
+  doesActivityMeetAdaption,
+  doesActivityMeetWater,
+  doesActivityMeetCE,
+  doesActivityMeetPollution,
   doesActivityMeetBio,
   doesActivityMeetAll,
   getNotEligbleTurnoverSum,
@@ -38,7 +38,7 @@ import {
   getNotEligbleOpExSum,
   getNotAlignedOpExSum,
   getAlignedOpExSum
- } from "@/helpers/dashboardFunctions";
+} from "@/helpers/dashboardFunctions";
 
 type Props = {};
 
@@ -94,10 +94,10 @@ const Dashboard = (props: Props) => {
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="text-xl" style={{ fontWeight: 'normal' }}>
+              <ModalHeader className="text-xl text-default-600" style={{ fontWeight: 'normal' }}>
                 Update Total Turnover, CapEx, OpEx
               </ModalHeader>
-              <ModalBody className="text-medium" style={{ fontWeight: 'normal' }}>
+              <ModalBody className="text-medium text-default-600" style={{ fontWeight: 'normal' }}>
                 <p>
                   Reporting in accordance with the EU taxonomy indicates the proportion of taxonomy eligible and taxonomy aligned economic activities.
                 </p>
