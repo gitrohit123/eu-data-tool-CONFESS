@@ -112,9 +112,9 @@ const Dashboard = (props: Props) => {
                   <Input
                     type="number"
                     label="Total Turnover"
-                    value={totalTurnover}
+                    value={String(totalTurnover)}
                     onChange={(e) => setTotalTurnover(Number(e.target.value))}
-                    isRequired="true"
+                    isRequired={true}
                     endContent={
                       <span className="text-default-400 text-small">€</span>
                     }
@@ -124,9 +124,9 @@ const Dashboard = (props: Props) => {
                   <Input
                     type="number"
                     label="Total CapEx"
-                    value={totalCapEx}
+                    value={String(totalCapEx)}
                     onChange={(e) => setTotalCapEx(Number(e.target.value))}
-                    isRequired="true"
+                    isRequired={true}
                     endContent={
                       <span className="text-default-400 text-small">€</span>
                     }
@@ -136,9 +136,9 @@ const Dashboard = (props: Props) => {
                   <Input
                     type="number"
                     label="Total OpEx"
-                    value={totalOpEx}
+                    value={String(totalOpEx)}
                     onChange={(e) => setTotalOpEx(Number(e.target.value))}
-                    isRequired="true"
+                    isRequired={true}
                     endContent={
                       <span className="text-default-400 text-small">€</span>
                     }
@@ -275,7 +275,7 @@ const Dashboard = (props: Props) => {
 
           {activityList.map((activity: any, index: number) => {
             return (
-              <div>
+              <div key={activity.id || index}>
                 <ActivityDashboardCard
                   activityName={"Activity " + (index + 1) + " - " + activity.name}
                   substentialContribution={doesActivityMeetSC(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}

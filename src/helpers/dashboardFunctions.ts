@@ -1,16 +1,25 @@
-export function doesActivityMeetSC(activity: any): boolean {
-    return activity.questions.some(question => question.question.includes("meets the Do No"));
+interface Question {
+    question: string;
+    answer: string;
 }
 
-export const doesActivityMeetAdaption = (activity: any): boolean => doesActivityMeetSC(activity) && false;
-export const doesActivityMeetWater = (activity: any): boolean => doesActivityMeetSC(activity) && false;
-export const doesActivityMeetCE = (activity: any): boolean => doesActivityMeetSC(activity) && true;
-export const doesActivityMeetPollution = (activity: any): boolean => doesActivityMeetSC(activity) && true;
+interface Activity {
+    questions: Question[];
+}
 
-export const doesActivityMeetBio = (activity: any): boolean =>
+export function doesActivityMeetSC(activity: Activity): boolean {
+    return activity.questions.some((question: Question) => question.question.includes("meets the Do No"));
+}
+
+export const doesActivityMeetAdaption = (activity: Activity): boolean => doesActivityMeetSC(activity) && false;
+export const doesActivityMeetWater = (activity: Activity): boolean => doesActivityMeetSC(activity) && false;
+export const doesActivityMeetCE = (activity: Activity): boolean => doesActivityMeetSC(activity) && true;
+export const doesActivityMeetPollution = (activity: Activity): boolean => doesActivityMeetSC(activity) && true;
+
+export const doesActivityMeetBio = (activity: Activity): boolean =>
     doesActivityMeetSC(activity) && activity.questions.some(question => !question.question.includes("This Data Tool Can Only Assess Activities That Take Place In The EU"));
 
-export const doesActivityMeetAll = (activity: any): boolean =>
+export const doesActivityMeetAll = (activity: Activity): boolean =>
     doesActivityMeetSC(activity) &&
     doesActivityMeetAdaption(activity) &&
     doesActivityMeetWater(activity) &&
@@ -18,7 +27,7 @@ export const doesActivityMeetAll = (activity: any): boolean =>
     doesActivityMeetPollution(activity) &&
     doesActivityMeetBio(activity);
 
-const isActivityNotAligned = (activity: any): boolean =>
+const isActivityNotAligned = (activity: Activity): boolean =>
     doesActivityMeetSC(activity) &&
     !(doesActivityMeetAdaption(activity) &&
         doesActivityMeetWater(activity) &&
@@ -26,9 +35,9 @@ const isActivityNotAligned = (activity: any): boolean =>
         doesActivityMeetPollution(activity) &&
         doesActivityMeetBio(activity));
 
-const getFinancialMetricSum = (activityList: any, condition: (activity: any) => boolean, metricName: string): number => {
+const getFinancialMetricSum = (activityList: any, condition: (activity: Activity) => boolean, metricName: string): number => {
     let sum = 0;
-    activityList.forEach(activity => {
+    activityList.forEach((activity: Activity) => {
         if (condition(activity)) {
             const metricQuestion = activity.questions.find(q => q.question.includes(`Query the ${metricName} of the economic activity`));
             if (metricQuestion) {
