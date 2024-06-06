@@ -20,72 +20,100 @@ import AlignmentCard from "@/app/dashboard/dashboardComponents/AlignmentCard";
 import ActivityDashboardCard from "@/app/dashboard/dashboardComponents/ActivityDashboardCard";
 import { EvaluationResult } from "@/app/dashboard/dashboardComponents/ActivityDashboardCard";
 import useAuth from "@/context/auth";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import {
   doesActivityMeetSC,
-  doesActivityMeetAdaption,
+  doesActivityMeetAdaptation,
   doesActivityMeetWater,
   doesActivityMeetCE,
   doesActivityMeetPollution,
   doesActivityMeetBio,
   doesActivityMeetAll,
-  getNotEligbleTurnoverSum,
   getNotAlignedTurnoverSum,
   getAlignedTurnoverSum,
-  getNotEligbleCapExSum,
   getNotAlignedCapExSum,
   getAlignedCapExSum,
-  getNotEligbleOpExSum,
   getNotAlignedOpExSum,
   getAlignedOpExSum
 } from "@/helpers/dashboardFunctions";
+import toast from "react-hot-toast";
 
 type Props = {};
 
 const Dashboard = (props: Props) => {
+  const router = useRouter();
   const { isAuthenticated, user } = useAuth();
 
   const [activityList, setActivities] = React.useState([]);
-  const totalActivities = activityList.length;
   const [loading, setLoading] = React.useState(true);
 
-  const [isModalOpen, setModalOpen] = useState<boolean>(true);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [totalTurnover, setTotalTurnover] = useState<number>(10000);
   const [totalCapEx, setTotalCapEx] = useState<number>(3000);
   const [totalOpEx, setTotalOpEx] = useState<number>(3000);
+  const [totalActivities, setTotalActivities] = useState<number>(0);
 
   const turnoverAlignedActivitiesTotal = getAlignedTurnoverSum(activityList);
   const turnoverNotAlignedActivitiesTotal = getNotAlignedTurnoverSum(activityList);
-  const turnoverNotEligibleActivitiesTotal = getNotEligbleTurnoverSum(activityList);
+  const turnoverNotEligibleActivitiesTotal = Math.max(0, totalTurnover - turnoverAlignedActivitiesTotal - turnoverNotAlignedActivitiesTotal);
 
   const capExAlignedActivitiesTotal = getAlignedCapExSum(activityList);
   const capExNotAlignedActivitiesTotal = getNotAlignedCapExSum(activityList);
-  const capExNotEligibleActivitiesTotal = getNotEligbleCapExSum(activityList);
+  const capExNotEligibleActivitiesTotal = Math.max(0, totalCapEx - capExAlignedActivitiesTotal - capExNotAlignedActivitiesTotal);
 
   const opExAlignedActivitiesTotal = getAlignedOpExSum(activityList);
   const opExNotAlignedActivitiesTotal = getNotAlignedOpExSum(activityList);
-  const opExNotEligibleActivitiesTotal = getNotEligbleOpExSum(activityList);
+  const opExNotEligibleActivitiesTotal = Math.max(0, totalOpEx - opExAlignedActivitiesTotal - opExNotAlignedActivitiesTotal);
 
   const totalAlignedActivitiesTotal = activityList.filter(doesActivityMeetAll).length;
-  const totalNotEligibleActivitiesTotal = activityList.filter(activity => !doesActivityMeetSC(activity)).length;
-  const totalNotAlignedActivitiesTotal = activityList.length - totalAlignedActivitiesTotal - totalNotEligibleActivitiesTotal;
+  const totalNotAlignedActivitiesTotal = activityList.filter(activity => !doesActivityMeetSC(activity)).length;
+  const totalNotEligibleActivitiesTotal = Math.max(0, totalActivities - totalAlignedActivitiesTotal - totalNotAlignedActivitiesTotal);
 
   useEffect(() => {
     const getData = async () => {
+    try {
       const response = await axios.get("/api/users/user");
       const user = response.data.data;
 
       const dashboardResponse = await axios.get("/api/dashboard/" + user._id);
       const activities = dashboardResponse.data.data;
       setActivities(activities);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false); // Set loading to false whether success or failure
+      setModalOpen(true);
+    }
     };
+
     getData();
-    setModalOpen(true);
   }, []);
 
-  const handleSubmit = () => {
-    setModalOpen(false);
-    setLoading(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const totalActivitiesCorrect = totalActivities >= activityList.length;
+    const totalTurnoverTool = Math.max(0, turnoverAlignedActivitiesTotal + turnoverNotAlignedActivitiesTotal);
+    const totalTurnoverCorrect = totalTurnover >= totalTurnoverTool;
+    const totalCapExTool = Math.max(0, capExAlignedActivitiesTotal + capExNotAlignedActivitiesTotal);
+    const totalCapExCorrect = totalCapEx >= totalCapExTool;
+    const totalOpExTool = Math.max(0, opExAlignedActivitiesTotal + opExNotAlignedActivitiesTotal);
+    const totalOpExCorrect = totalOpEx >= totalOpExTool;
+
+    if (loading) {
+      toast.error('Still loading data...');
+    } else if (!totalActivitiesCorrect) {
+      toast.error('You have submitted more activitites than you entered in the total count: ' + activityList.length);
+    } else if (!totalTurnoverCorrect) {
+      toast.error('You have submitted a smaller turnover than you entered in the tool for your activities: ' + totalTurnoverTool);
+    } else if (!totalCapExCorrect) {
+      toast.error('You have submitted a smaller CapEx than you entered in the tool for your activities: ' + totalCapExTool);
+    } else if (!totalOpExCorrect) {
+      toast.error('You have submitted a smaller OpEx than you entered in the tool for your activities: ' + totalOpExTool);
+    } else {      
+      setModalOpen(false);
+      setLoading(false);
+    }
   };
 
   return (
@@ -103,7 +131,7 @@ const Dashboard = (props: Props) => {
                 </p>
                 <p>
                   In order to determine their monetary value, the share of taxonomy eligible and taxonomy-aligned activities in turnover, CapEx and OpEx is calculated and reported.
-                  To calculate this, we need to know your total turnover, CapEx and OpEx of the last fiscal year.
+                  To calculate this, we need to know your total turnover, CapEx and OpEx of the last fiscal year. We also need to know the total number of economic activities your company performs.
                 </p>
                 <p style={{ marginBottom: '10px' }}>
                   If you do not know and cannot collect the exact total financials of the last year, please estimate:
@@ -113,7 +141,13 @@ const Dashboard = (props: Props) => {
                     type="number"
                     label="Total Turnover"
                     value={String(totalTurnover)}
-                    onChange={(e) => setTotalTurnover(Number(e.target.value))}
+                    onChange={(e) => {
+                      let value = Number(e.target.value);
+                      if (value < 0) {
+                        value = 0;
+                      }
+                      setTotalTurnover(value);
+                    }}
                     isRequired={true}
                     endContent={
                       <span className="text-default-400 text-small">€</span>
@@ -125,7 +159,13 @@ const Dashboard = (props: Props) => {
                     type="number"
                     label="Total CapEx"
                     value={String(totalCapEx)}
-                    onChange={(e) => setTotalCapEx(Number(e.target.value))}
+                    onChange={(e) => {
+                      let value = Number(e.target.value);
+                      if (value < 0) {
+                        value = 0;
+                      }
+                      setTotalCapEx(value);
+                    }}
                     isRequired={true}
                     endContent={
                       <span className="text-default-400 text-small">€</span>
@@ -137,16 +177,37 @@ const Dashboard = (props: Props) => {
                     type="number"
                     label="Total OpEx"
                     value={String(totalOpEx)}
-                    onChange={(e) => setTotalOpEx(Number(e.target.value))}
+                    onChange={(e) => {
+                      let value = Number(e.target.value);
+                      if (value < 0) {
+                        value = 0;
+                      }
+                      setTotalOpEx(value);
+                    }}
                     isRequired={true}
                     endContent={
                       <span className="text-default-400 text-small">€</span>
                     }
                   />
                 </div>
+                <div className="w-[200px]">
+                  <Input
+                    type="number"
+                    label="Total Activities"
+                    value={String(totalActivities)}
+                    onChange={(e) => {
+                      let value = Number(e.target.value);
+                      if (value < 0) {
+                        value = 0;
+                      }
+                      setTotalActivities(value);
+                    }}
+                    isRequired={true}
+                  />
+                </div>
               </ModalBody>
               <ModalFooter>
-                <Button onClick={() => setModalOpen(false)}>
+                <Button onClick={() => { setModalOpen(false); router.push('/'); }}>
                   Cancel
                 </Button>
                 <Button color="primary" onClick={handleSubmit}>
@@ -279,7 +340,7 @@ const Dashboard = (props: Props) => {
                 <ActivityDashboardCard
                   activityName={"Activity " + (index + 1) + " - " + activity.name}
                   substentialContribution={doesActivityMeetSC(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
-                  adaption={doesActivityMeetAdaption(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
+                  adaption={EvaluationResult.NOT_ASSESSABLE}
                   water={doesActivityMeetWater(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
                   circularEconomy={doesActivityMeetCE(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
                   pollution={doesActivityMeetPollution(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}

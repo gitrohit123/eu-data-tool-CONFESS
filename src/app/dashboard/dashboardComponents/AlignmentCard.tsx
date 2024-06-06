@@ -17,6 +17,10 @@ type Props = {
   };
 
 const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal, notEligibleActivitiesTotal, total, showEuro}: Props) => {
+  
+  const alignedPercentage = (total ?? 0) ? Math.min(Math.round((alignedActivitiesTotal / total) * 100), 100) + '%' : '0%';
+  const notAlignedPercentage = (total ?? 0) ? Math.min(Math.round((notAlignedActivitiesTotal / total) * 100), 100) + '%' : '0%';
+  const notEligiblePercentage = (total ?? 0) ? Math.min(Math.round((notEligibleActivitiesTotal / total) * 100), 100) + '%' : '0%';
 
   return (
         <Card className={"mt-[30px] w-[290px] h-[300px]"}>
@@ -46,7 +50,7 @@ const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal
                   }}></div>
                   Aligned
                 </div>
-                <div>{alignedActivitiesTotal} {showEuro? '€' : ''} ({Math.round(alignedActivitiesTotal/total*100)}%)</div>
+                <div>{alignedActivitiesTotal} {showEuro? '€' : ''} ({alignedPercentage})</div>
               </div>
               <div className={"text-xs"} style={{display:'flex', margin: '5px', justifyContent:'space-between'}}>
               <div style={{display: 'flex', alignItems: 'center'}}>
@@ -59,7 +63,7 @@ const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal
                   }}></div>
                   Not aligned but eligible
                 </div>
-                <div>{notAlignedActivitiesTotal} {showEuro? '€' : ''} ({Math.round(notAlignedActivitiesTotal/total*100)}%)</div>
+                <div>{notAlignedActivitiesTotal} {showEuro? '€' : ''} ({notAlignedPercentage})</div>
               </div>
               <div className={"text-xs"} style={{display:'flex', margin: '5px', justifyContent:'space-between'}}>
               <div style={{display: 'flex', alignItems: 'center'}}>
@@ -72,7 +76,7 @@ const AlignmentCard = ({title, alignedActivitiesTotal, notAlignedActivitiesTotal
                   }}></div>
                   Not eligible
                 </div>
-                <div>{notEligibleActivitiesTotal} {showEuro? '€' : ''} ({Math.round(notEligibleActivitiesTotal/total*100)}%)</div>
+                <div>{notEligibleActivitiesTotal} {showEuro? '€' : ''} ({notEligiblePercentage})</div>
               </div>
               </CardBody>
           </Card>
