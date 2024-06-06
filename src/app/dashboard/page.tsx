@@ -54,16 +54,16 @@ const Dashboard = (props: Props) => {
   const [totalOpEx, setTotalOpEx] = useState<number>(3000);
   const [totalActivities, setTotalActivities] = useState<number>(0);
 
-  const turnoverAlignedActivitiesTotal = getAlignedTurnoverSum(activityList);
-  const turnoverNotAlignedActivitiesTotal = getNotAlignedTurnoverSum(activityList);
+  const turnoverAlignedActivitiesTotal = Number(getAlignedTurnoverSum(activityList)) || 0 ;
+  const turnoverNotAlignedActivitiesTotal = Number(getNotAlignedTurnoverSum(activityList)) || 0 ;
   const turnoverNotEligibleActivitiesTotal = Math.max(0, totalTurnover - turnoverAlignedActivitiesTotal - turnoverNotAlignedActivitiesTotal);
 
-  const capExAlignedActivitiesTotal = getAlignedCapExSum(activityList);
-  const capExNotAlignedActivitiesTotal = getNotAlignedCapExSum(activityList);
+  const capExAlignedActivitiesTotal = Number(getAlignedCapExSum(activityList)) || 0 ;
+  const capExNotAlignedActivitiesTotal = Number(getNotAlignedCapExSum(activityList)) || 0 ;
   const capExNotEligibleActivitiesTotal = Math.max(0, totalCapEx - capExAlignedActivitiesTotal - capExNotAlignedActivitiesTotal);
 
-  const opExAlignedActivitiesTotal = getAlignedOpExSum(activityList);
-  const opExNotAlignedActivitiesTotal = getNotAlignedOpExSum(activityList);
+  const opExAlignedActivitiesTotal = Number(getAlignedOpExSum(activityList)) || 0 ;
+  const opExNotAlignedActivitiesTotal = Number(getNotAlignedOpExSum(activityList)) || 0 ;
   const opExNotEligibleActivitiesTotal = Math.max(0, totalOpEx - opExAlignedActivitiesTotal - opExNotAlignedActivitiesTotal);
 
   const totalAlignedActivitiesTotal = activityList.filter(doesActivityMeetAll).length;
@@ -92,7 +92,7 @@ const Dashboard = (props: Props) => {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const totalActivitiesCorrect = totalActivities >= activityList.length;
+    const totalActivitiesCorrect = totalActivities >= activityList.length; 
     const totalTurnoverTool = Math.max(0, turnoverAlignedActivitiesTotal + turnoverNotAlignedActivitiesTotal);
     const totalTurnoverCorrect = totalTurnover >= totalTurnoverTool;
     const totalCapExTool = Math.max(0, capExAlignedActivitiesTotal + capExNotAlignedActivitiesTotal);
