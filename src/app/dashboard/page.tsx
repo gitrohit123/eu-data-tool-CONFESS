@@ -90,7 +90,7 @@ const Dashboard = (props: Props) => {
     getData();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const totalActivitiesCorrect = totalActivities >= activityList.length;
     const totalTurnoverTool = Math.max(0, turnoverAlignedActivitiesTotal + turnoverNotAlignedActivitiesTotal);
