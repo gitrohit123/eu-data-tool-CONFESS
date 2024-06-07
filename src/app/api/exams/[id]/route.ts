@@ -4,6 +4,7 @@ import { connect } from "@/dbConfig/dbConfig";
 import { getTokenData } from "@/helpers/getTokenData";
 import Answer from "@/models/answerModels";
 import mongoose from "mongoose";
+const { randomUUID } = require('crypto');
 
 connect();
 
@@ -30,13 +31,13 @@ export async function POST(
     const { answers } = await request.json();
 
     // Generate a unique exam ID, so multiple activities of the same type can be submitted
-    const examId = new mongoose.Types.ObjectId();
+    const examId = randomUUID();
     const answerData = answers.map((answer: any) => {
       return {
         question: new mongoose.Types.ObjectId(answer._id.toString()),
         answer: answer.answer || "result",
         exam: new mongoose.Types.ObjectId(params.id),
-        examId: examId,
+        examId: examId.toString(),
         user: new mongoose.Types.ObjectId(userId),
       };
     });
