@@ -95,3 +95,4 @@ const ExamsByUser = ({ params }: Props) => {
 };
 
 export default ExamsByUser;
+export const dynamic = "force-dynamic";

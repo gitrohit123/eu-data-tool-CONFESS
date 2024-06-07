@@ -31,7 +31,6 @@ const EditExamLayout = ({ exam, questionData }: Props) => {
   const [examData, setExamData] = React.useState({
     name: exam?.name || "",
     category: exam?.category || "",
-    duration: exam?.duration || 3600,
   });
   const [questions, setQuestions] = React.useState<any[]>(questionData || []);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -174,18 +173,6 @@ const EditExamLayout = ({ exam, questionData }: Props) => {
               onClear={() => setExamData({ ...examData, name: "" })}
               onChange={(e: any) =>
                 setExamData({ ...examData, name: e.target.value })
-              }
-            />
-            <Input
-              isClearable
-              label="Exam Duration"
-              variant="bordered"
-              className="p-2 m-2  max-w-md"
-              id="duration"
-              value={examData.duration.toString()}
-              onClear={() => setExamData({ ...examData, duration: 0 })}
-              onChange={(e: any) =>
-                setExamData({ ...examData, duration: parseInt(e.target.value) })
               }
             />
             <Input

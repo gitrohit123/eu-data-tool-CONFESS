@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import { Input, Textarea } from "@nextui-org/react";
 import React from "react";
 
 type Props = {
@@ -101,6 +101,18 @@ const ShortText = () => {
   return <> </>;
 };
 
+const MultipleSelect = ({question, setQuestion}: Props) => {
+  return (<>
+    <Textarea 
+      className="p-2 m-2  max-w-md"
+      label={"options"}
+      variant="bordered"
+      isRequired
+      value={question.options || ""}
+      onChange={(e: any) => setQuestion({...question, options: e.target.value})} />
+  </>);
+};
+
 const LongText = () => {
   return <> </>;
 };
@@ -109,4 +121,4 @@ const FileUpload = () => {
   return <></>;
 };
 
-export { MCQ, ShortText, LongText, FileUpload };
+export { MCQ, ShortText, MultipleSelect, LongText, FileUpload };

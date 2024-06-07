@@ -31,8 +31,8 @@ export default function NavigationBar({}: NavbarProps) {
 
   const links = [
     { name: "Home", href: "/" },
-    { name: "Dashboard", href: "/dashboard"},
-    { name: "Exams", href: "/admin/exams", admin: true },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Assessments", href: "/admin/exams", admin: true },
     { name: "Reports", href: "/admin/reports", admin: true },
   ];
 
@@ -61,13 +61,15 @@ export default function NavigationBar({}: NavbarProps) {
               className="sm:hidden"
             />
             <Link href="/">
-              <NavbarBrand>
-                <Image
-                  src="/logo.png"
-                  width={200}
-                  alt="LOGO"
-                  className="mt-2"
-                />
+              <NavbarBrand className="p-4">
+                <div className="bg-slate-200/50 rounded-b-xl m-4">
+                  <Image
+                    src="/logo.png"
+                    width={200}
+                    alt="LOGO"
+                    className="mt-2"
+                  />
+                </div>
               </NavbarBrand>
             </Link>
           </NavbarContent>
@@ -100,7 +102,7 @@ export default function NavigationBar({}: NavbarProps) {
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="profile" className="h-14 gap-2">
-                  <Link href="/profile">
+                  <Link href="">
                     <div>
                       <p className="font-semibold">Signed in as</p>
                       <p className="font-semibold">{user.name}</p>

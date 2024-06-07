@@ -10,7 +10,7 @@ import {
   SelectItem,
   Select,
 } from "@nextui-org/react";
-import { MCQ } from "./questionType";
+import { MCQ, MultipleSelect } from "./questionType";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -37,7 +37,6 @@ export default function QuestionModal({
     questionID: questionData?.questionID || "",
     name: questionData?.name || "",
     questionType: questionData?.questionType || "",
-    questionCategory: questionData?.questionCategory || "",
     nextQuestion: questionData?.nextQuestion || "",
     exam: examID,
   });
@@ -54,7 +53,6 @@ export default function QuestionModal({
         questionID: "",
         name: "",
         questionType: "",
-        questionCategory: "",
         nextQuestion: "",
         exam: examID,
       });
@@ -101,6 +99,7 @@ export default function QuestionModal({
               <ModalBody>
                 <Input
                   isClearable
+                  isRequired
                   label="Question ID"
                   variant="bordered"
                   className="p-2 m-2  max-w-md"
@@ -113,6 +112,7 @@ export default function QuestionModal({
                 />
                 <Input
                   isClearable
+                  isRequired
                   label="Question"
                   variant="bordered"
                   className="p-2 m-2  max-w-md"
@@ -124,6 +124,7 @@ export default function QuestionModal({
                   }
                 />
                 <Select
+                  isRequired
                   label="Question Type"
                   variant="bordered"
                   className="p-2 m-2  max-w-md"
@@ -142,37 +143,11 @@ export default function QuestionModal({
                   <SelectItem key={"LongText"} value={"LongText"}>
                     Long Text
                   </SelectItem>
-                  <SelectItem key={"Blank"} value={"Blank"}>
-                    Blank
+                  <SelectItem key={"NumericalValue"} value={"NumericalValue"}>
+                    Numerical Value
                   </SelectItem>
-                </Select>
-                <Select
-                  label="Question Category"
-                  variant="bordered"
-                  className="p-2 m-2  max-w-md"
-                  id="questionCategory"
-                  selectedKeys={[question.questionCategory]}
-                  onChange={(e: any) =>
-                    setQuestion({ ...question, questionCategory: e.target.value })
-                  }
-                >
-                  <SelectItem key={"SC"} value={"SC"}>
-                    Substential Contribution
-                  </SelectItem>
-                  <SelectItem key={"Adaption"} value={"Adaption"}>
-                    DNSH - Adaptation
-                  </SelectItem>
-                  <SelectItem key={"Water"} value={"Water"}>
-                    DNSH - Water
-                  </SelectItem>
-                  <SelectItem key={"CE"} value={"CE"}>
-                    DNSH - CE
-                  </SelectItem>
-                  <SelectItem key={"Pollution"} value={"Pollution"}>
-                    DNSH - Pollution
-                  </SelectItem>
-                  <SelectItem key={"Biodiversity"} value={"Biodiversity"}>
-                    DNSH - Biodiversity
+                  <SelectItem key={"MultipleSelect"} value={"MultipleSelect"}>
+                    Multiple Select
                   </SelectItem>
                   <SelectItem key={"Blank"} value={"Blank"}>
                     Blank
@@ -192,6 +167,9 @@ export default function QuestionModal({
                 />
                 {question.questionType === "MCQ" && (
                   <MCQ question={question} setQuestion={setQuestion} />
+                )}
+                {question.questionType === "MultipleSelect" && (
+                  <MultipleSelect question={question} setQuestion={setQuestion} />
                 )}
               </ModalBody>
               <ModalFooter>

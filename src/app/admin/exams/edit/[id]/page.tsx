@@ -14,11 +14,10 @@ type Props = {
 };
 connect();
 const EditExam = async ({ params }: Props) => {
-  const exam = await Exam.findById(params.id).select(
-    "_id name category duration"
-  );
+  const exam = await Exam.findById(params.id).select("_id name category");
   const questions = await Question.find({ exam: params.id });
   return <EditExamLayout exam={exam} questionData={questions} />;
 };
 
 export default EditExam;
+export const dynamic = "force-dynamic";

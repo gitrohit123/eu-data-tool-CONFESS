@@ -7,7 +7,7 @@ const answerSchema = new mongoose.Schema(
       ref: "questions",
     },
     answer: {
-      type: String,
+      type: String || Array,
       required: true,
     },
     exam: {
