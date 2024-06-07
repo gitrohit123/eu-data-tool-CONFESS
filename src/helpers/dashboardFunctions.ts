@@ -34,7 +34,7 @@ export const doesActivityMeetCE = (activity: Activity): boolean => doesActivityM
 export const doesActivityMeetPollution = (activity: Activity): boolean => doesActivityMeetCritera(activity, "Pollution");
 
 export const doesActivityMeetBio = (activity: Activity): boolean =>
-    doesActivityMeetSC(activity) && activity.questions.some(question => !question.question.includes("This Data Tool Can Only Assess Activities That Take Place In The EU"));
+    doesActivityMeetCritera(activity, "Biodiversity") || activity.questions.some(question => !question.question.includes("This Data Tool Can Only Assess Activities That Take Place In The EU"));
 
 export const doesActivityMeetAll = (activity: Activity): boolean =>
     doesActivityMeetSC(activity) &&

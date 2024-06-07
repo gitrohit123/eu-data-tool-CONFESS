@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const questions = await Question.find({ exam: params.examId }).select(
-      "_id name questionType questionID nextQuestion options"
+      "_id name questionType questionCategory questionID nextQuestion options"
     );
     return NextResponse.json({ data: questions, status: 200 });
   } catch (error: any) {

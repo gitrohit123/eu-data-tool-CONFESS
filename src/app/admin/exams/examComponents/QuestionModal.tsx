@@ -168,7 +168,7 @@ export default function QuestionModal({
                 <SelectItem key={"SC"} value={"SC"}>
                   Substential Contribution
                 </SelectItem>
-                <SelectItem key={"Adaption"} value={"Adaption"}>
+                <SelectItem key={"Adaptation"} value={"Adaptation"}>
                   DNSH - Adaptation
                 </SelectItem>
                 <SelectItem key={"Water"} value={"Water"}>

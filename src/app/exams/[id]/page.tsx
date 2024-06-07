@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import CenterSection from "@/components/CenterSection";
+import  { getCategoryDisplayString } from "@/helpers/categoryHelper";
 
 type Props = {
   params: {
@@ -118,9 +119,10 @@ const WriteExam = ({ params }: Props) => {
             </div>
           ) : (
             <div className=" w-full min-h-[60vh] mt-10 h-full justify-between self-start flex flex-col ">
-              <div className="flex flex-row justify-between place-content-center place-items-center">
+              <div className="flex flex-col justify-between place-content-center place-items-center">
                 <h1 className="text-4xl">{exam.name}</h1>
               </div>
+              <h1 className="text-2xl text-start m-4">{getCategoryDisplayString(currentQuestion)}</h1>
               <div className="flex flex-col text-justify">
                 <h1 className="text-xl my-3">
                   <div
