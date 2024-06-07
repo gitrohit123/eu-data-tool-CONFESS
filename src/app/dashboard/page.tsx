@@ -54,16 +54,16 @@ const Dashboard = (props: Props) => {
   const [totalOpEx, setTotalOpEx] = useState<number>(3000);
   const [totalActivities, setTotalActivities] = useState<number>(0);
 
-  const turnoverAlignedActivitiesTotal = Number(getAlignedTurnoverSum(activityList)) || 0 ;
-  const turnoverNotAlignedActivitiesTotal = Number(getNotAlignedTurnoverSum(activityList)) || 0 ;
+  const turnoverAlignedActivitiesTotal = Number(getAlignedTurnoverSum(activityList)) || 0;
+  const turnoverNotAlignedActivitiesTotal = Number(getNotAlignedTurnoverSum(activityList)) || 0;
   const turnoverNotEligibleActivitiesTotal = Math.max(0, totalTurnover - turnoverAlignedActivitiesTotal - turnoverNotAlignedActivitiesTotal);
 
-  const capExAlignedActivitiesTotal = Number(getAlignedCapExSum(activityList)) || 0 ;
-  const capExNotAlignedActivitiesTotal = Number(getNotAlignedCapExSum(activityList)) || 0 ;
+  const capExAlignedActivitiesTotal = Number(getAlignedCapExSum(activityList)) || 0;
+  const capExNotAlignedActivitiesTotal = Number(getNotAlignedCapExSum(activityList)) || 0;
   const capExNotEligibleActivitiesTotal = Math.max(0, totalCapEx - capExAlignedActivitiesTotal - capExNotAlignedActivitiesTotal);
 
-  const opExAlignedActivitiesTotal = Number(getAlignedOpExSum(activityList)) || 0 ;
-  const opExNotAlignedActivitiesTotal = Number(getNotAlignedOpExSum(activityList)) || 0 ;
+  const opExAlignedActivitiesTotal = Number(getAlignedOpExSum(activityList)) || 0;
+  const opExNotAlignedActivitiesTotal = Number(getNotAlignedOpExSum(activityList)) || 0;
   const opExNotEligibleActivitiesTotal = Math.max(0, totalOpEx - opExAlignedActivitiesTotal - opExNotAlignedActivitiesTotal);
 
   const totalAlignedActivitiesTotal = activityList.filter(doesActivityMeetAll).length;
@@ -72,33 +72,37 @@ const Dashboard = (props: Props) => {
 
   useEffect(() => {
     const getData = async () => {
-    try {
-      const response = await axios.get("/api/users/user");
-      const user = response.data.data;
+      try {
+        const response = await axios.get("/api/users/user");
+        const user = response.data.data;
 
-      const dashboardResponse = await axios.get("/api/dashboard/" + user._id);
-      const activities = dashboardResponse.data.data;
-      setActivities(activities);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    } finally {
-      setLoading(false); // Set loading to false whether success or failure
-      setModalOpen(true);
-    }
+        const dashboardResponse = await axios.get("/api/dashboard/" + user._id);
+        const activities = dashboardResponse.data.data;
+        setActivities(activities);
+        console.log(activities);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false); // Set loading to false whether success or failure
+      }
     };
-
     getData();
+    setModalOpen(true);
   }, []);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const totalActivitiesCorrect = totalActivities >= activityList.length; 
+    const totalActivitiesCorrect = totalActivities >= activityList.length;
     const totalTurnoverTool = Math.max(0, turnoverAlignedActivitiesTotal + turnoverNotAlignedActivitiesTotal);
     const totalTurnoverCorrect = totalTurnover >= totalTurnoverTool;
     const totalCapExTool = Math.max(0, capExAlignedActivitiesTotal + capExNotAlignedActivitiesTotal);
     const totalCapExCorrect = totalCapEx >= totalCapExTool;
     const totalOpExTool = Math.max(0, opExAlignedActivitiesTotal + opExNotAlignedActivitiesTotal);
     const totalOpExCorrect = totalOpEx >= totalOpExTool;
+
+    console.log("activityList ", activityList);
+    console.log("turnoverAlignedActivitiesTotal", turnoverAlignedActivitiesTotal);
+    console.log("turnoverNotAlignedActivitiesTotal", turnoverNotAlignedActivitiesTotal);
 
     if (loading) {
       toast.error('Still loading data...');
@@ -110,7 +114,7 @@ const Dashboard = (props: Props) => {
       toast.error('You have submitted a smaller CapEx than you entered in the tool for your activities: ' + totalCapExTool);
     } else if (!totalOpExCorrect) {
       toast.error('You have submitted a smaller OpEx than you entered in the tool for your activities: ' + totalOpExTool);
-    } else {      
+    } else {
       setModalOpen(false);
       setLoading(false);
     }

@@ -36,6 +36,9 @@ const questionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "exams",
   },
+  examId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
 }, {
     timestamps: true,
 });

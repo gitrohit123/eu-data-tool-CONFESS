@@ -28,11 +28,15 @@ export async function POST(
       request.cookies.get("token")?.value || ""
     );
     const { answers } = await request.json();
+
+    // Generate a unique exam ID, so multiple activities of the same type can be submitted
+    const examId = new mongoose.Types.ObjectId();
     const answerData = answers.map((answer: any) => {
       return {
         question: new mongoose.Types.ObjectId(answer._id.toString()),
         answer: answer.answer || "result",
         exam: new mongoose.Types.ObjectId(params.id),
+        examId: examId,
         user: new mongoose.Types.ObjectId(userId),
       };
     });

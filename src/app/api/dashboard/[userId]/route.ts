@@ -46,6 +46,8 @@ export async function GET(
           "question.questionID": 1,
           "question.name": 1,
           "question.questionCategory": 1,
+          "question.exam": 1,
+          "question.examId": 1,
           answer: 1,
         },
       },
@@ -60,6 +62,8 @@ export async function GET(
           user: { $first: "$user._id" },
           questions: {
             $push: {
+              examId: "$question.examId",
+              exam: "$question.exam",
               question: "$question.name",
               questionId: "$question.questionID",
               answer: "$answer",
