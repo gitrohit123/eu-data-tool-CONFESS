@@ -56,13 +56,13 @@ const getFinancialMetricSum = (activityList: any, condition: (activity: Activity
     let sum = 0;
     activityList.forEach((activity: Activity) => {
         if (condition(activity)) {
-            const metricQuestion = activity.questions.find(q => q.question.includes(`Query the ${metricName} of the economic activity`));
-            if (metricQuestion) {
+            const metricQuestions = activity.questions.filter((question: Question) => question.category === metricName);
+            metricQuestions.forEach((metricQuestion) => {
                 const value = parseInt(metricQuestion.answer, 10);
                 if (!isNaN(value)) {
                     sum += value;
                 }
-            }
+            });
         }
     });
     return sum;
