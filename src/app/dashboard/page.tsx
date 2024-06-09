@@ -80,7 +80,6 @@ const Dashboard = (props: Props) => {
       try {
         const response = await axios.get("/api/users/user");
         const user = response.data.data;
-        console.log(user);
         setTotalActivities(user.totalActivities ?? 0);
         setTotalTurnover(user.totalTurnover ?? TURNOVER_DEFAULT);
         setTotalCapEx(user.totalCapEx ?? CAPEX_DEFAULT);
