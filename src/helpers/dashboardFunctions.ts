@@ -12,7 +12,7 @@ interface Activity {
 export function doesActivityMeetSC(activity: Activity): boolean {
     const scQuestions = activity.questions.filter((question: Question) => question.category === "SC");
     if (scQuestions.length === 0) {
-    return false; // Default to true if there are no SC questions
+        return false; // Default to true if there are no SC questions
     }
     const allSCQuestionsWereAnsweredYes = scQuestions.every((question: Question) => question.answer === "Yes");
     return allSCQuestionsWereAnsweredYes;
@@ -28,13 +28,22 @@ export function doesActivityMeetCritera(activity: Activity, critera: string): bo
     return allRelevantQuestionsWereAnsweredYes;
 }
 
-export const doesActivityMeetAdaptation = (activity: Activity): boolean => doesActivityMeetCritera(activity, "Adaptation");
-export const doesActivityMeetWater = (activity: Activity): boolean => doesActivityMeetCritera(activity, "Water");
-export const doesActivityMeetCE = (activity: Activity): boolean => doesActivityMeetCritera(activity, "CE");
-export const doesActivityMeetPollution = (activity: Activity): boolean => doesActivityMeetCritera(activity, "Pollution");
+// Actvity is not eligible
+export function isActivityEligible(activity: Activity): boolean {
+    return !activity.questions.some((question) => question.question === "Economic activity is not eligible!");
+}
 
-export const doesActivityMeetBio = (activity: Activity): boolean =>
-    doesActivityMeetCritera(activity, "Biodiversity") || activity.questions.some(question => !question.question.includes("This Data Tool Can Only Assess Activities That Take Place In The EU"));
+export const doesActivityMeetAdaptation = (activity: Activity): boolean => isActivityEligible(activity) && doesActivityMeetCritera(activity, "Adaptation");
+export const doesActivityMeetWater = (activity: Activity): boolean => isActivityEligible(activity) && doesActivityMeetCritera(activity, "Water");
+export const doesActivityMeetCE = (activity: Activity): boolean => isActivityEligible(activity) && doesActivityMeetCritera(activity, "CE");
+export const doesActivityMeetPollution = (activity: Activity): boolean => isActivityEligible(activity) && doesActivityMeetCritera(activity, "Pollution");
+
+export const doesActivityMeetBio = (activity: Activity): boolean => {
+    const isEligible = isActivityEligible(activity);
+    const meetsCriteria = doesActivityMeetCritera(activity, "Biodiversity");
+    const isNotInEU = activity.questions.some(question => question.question.includes("This Data Tool Can Only Assess Activities That Take Place In The EU"));
+    return isEligible && meetsCriteria && !isNotInEU;
+};
 
 export const doesActivityMeetAll = (activity: Activity): boolean =>
     doesActivityMeetSC(activity) &&

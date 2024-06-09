@@ -3,6 +3,9 @@ interface Question {
 }
 
 export function getCategoryDisplayString(question: Question): String {
+    if (!question || !question.questionCategory) {
+        return "";
+    }
     switch (question.questionCategory) {
         case "SC":
         case "turnover":
