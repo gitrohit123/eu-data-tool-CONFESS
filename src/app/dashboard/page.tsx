@@ -41,6 +41,11 @@ import toast from "react-hot-toast";
 
 type Props = {};
 
+
+const TURNOVER_DEFAULT = 10000;
+const CAPEX_DEFAULT = 3000;
+const OPEX_DEFAULT = 3000;
+
 const Dashboard = (props: Props) => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
@@ -49,9 +54,9 @@ const Dashboard = (props: Props) => {
   const [loading, setLoading] = React.useState(true);
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [totalTurnover, setTotalTurnover] = useState<number>(10000);
-  const [totalCapEx, setTotalCapEx] = useState<number>(3000);
-  const [totalOpEx, setTotalOpEx] = useState<number>(3000);
+  const [totalTurnover, setTotalTurnover] = useState<number>(TURNOVER_DEFAULT);
+  const [totalCapEx, setTotalCapEx] = useState<number>(CAPEX_DEFAULT);
+  const [totalOpEx, setTotalOpEx] = useState<number>(OPEX_DEFAULT);
   const [totalActivities, setTotalActivities] = useState<number>(0);
 
   const turnoverAlignedActivitiesTotal = Number(getAlignedTurnoverSum(activityList)) || 0;
@@ -75,11 +80,15 @@ const Dashboard = (props: Props) => {
       try {
         const response = await axios.get("/api/users/user");
         const user = response.data.data;
+        console.log(user);
+        setTotalActivities(user.totalActivities ?? 0);
+        setTotalTurnover(user.totalTurnover ?? TURNOVER_DEFAULT);
+        setTotalCapEx(user.totalCapEx ?? CAPEX_DEFAULT);
+        setTotalOpEx(user.totalOpEx ?? OPEX_DEFAULT);
 
         const dashboardResponse = await axios.get("/api/dashboard/" + user._id);
         const activities = dashboardResponse.data.data;
         setActivities(activities);
-        console.log(activities);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -90,7 +99,7 @@ const Dashboard = (props: Props) => {
     setModalOpen(true);
   }, []);
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const totalActivitiesCorrect = totalActivities >= activityList.length;
     const totalTurnoverTool = Math.max(0, turnoverAlignedActivitiesTotal + turnoverNotAlignedActivitiesTotal);
@@ -99,10 +108,6 @@ const Dashboard = (props: Props) => {
     const totalCapExCorrect = totalCapEx >= totalCapExTool;
     const totalOpExTool = Math.max(0, opExAlignedActivitiesTotal + opExNotAlignedActivitiesTotal);
     const totalOpExCorrect = totalOpEx >= totalOpExTool;
-
-    console.log("activityList ", activityList);
-    console.log("turnoverAlignedActivitiesTotal", turnoverAlignedActivitiesTotal);
-    console.log("turnoverNotAlignedActivitiesTotal", turnoverNotAlignedActivitiesTotal);
 
     if (loading) {
       toast.error('Still loading data...');
@@ -115,8 +120,25 @@ const Dashboard = (props: Props) => {
     } else if (!totalOpExCorrect) {
       toast.error('You have submitted a smaller OpEx than you entered in the tool for your activities: ' + totalOpExTool);
     } else {
-      setModalOpen(false);
-      setLoading(false);
+
+      // Save new total financial metrics for user 
+        try {
+          setLoading(true);
+          toast("Saving...");
+          const newUserData = user; // TODO: Add new numbers
+          newUserData.totalActivities = totalActivities;
+          newUserData.totalTurnover = totalTurnover;
+          newUserData.totalCapEx = totalCapEx;
+          newUserData.totalOpEx = totalOpEx;
+
+          await axios.put(`/api/users/user/${user?._id}`, newUserData);
+
+        } catch (error: any) {
+          toast.error(error.message);
+        } finally {
+          setModalOpen(false);
+          setLoading(false);        }    
+
     }
   };
 

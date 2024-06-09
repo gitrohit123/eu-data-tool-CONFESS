@@ -7,6 +7,7 @@ import { Input, Button, Image } from "@nextui-org/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/20/solid";
 import toast, { Toaster } from "react-hot-toast";
 import { set } from "mongoose";
+import useAuth from "@/context/auth";
 
 type Props = {};
 
@@ -14,6 +15,7 @@ const SignUp = (props: Props) => {
   const router = useRouter();
   const [user, setUser] = React.useState({ name: "", email: "", password: "" });
   const [isVisible, setIsVisible] = React.useState(false);
+  const { firstVisit, setFirstVisit } = useAuth();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -26,6 +28,7 @@ const SignUp = (props: Props) => {
       toast("Signing up...");
       await axios.post("/api/users/signup", user);
       toast.success("Signup successful");
+      setFirstVisit(false);
       router.push("/login");
     } catch (error: any) {
       toast.error(error.message);

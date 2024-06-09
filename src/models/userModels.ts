@@ -22,6 +22,22 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    totalTurnover: {
+        type: Number,
+        default: 10000,
+    },
+    totalCapEx: {
+        type: Number,
+        default: 3000,
+    },
+    totalOpEx: {
+        type: Number,
+        default: 3000,
+    },
+    totalActivities: {
+        type: Number,
+        default: 0,
+    },
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,
     verifyToken: String,
