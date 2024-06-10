@@ -2,8 +2,8 @@ import React from "react";
 import Section from "./Section";
 
 type Props = {
-  children: React.ReactNode;
-  className?: string;
+    children: React.ReactNode;
+    className?: string;
 };
 
 const CenterSection = ({ children, className }: Props) => {

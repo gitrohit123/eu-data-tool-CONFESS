@@ -44,7 +44,9 @@ export async function GET(
           "user._id": 1,
           "question.questionID": 1,
           "question.name": 1,
+          "question.questionCategory": 1,
           answer: 1,
+          examId: 1,
         },
       },
       { $unwind: { path: "$exam" } },
@@ -52,15 +54,17 @@ export async function GET(
       { $unwind: { path: "$question" } },
       {
         $group: {
-          _id: "$exam._id",
+          _id: "$examId",
           category: { $first: "$exam.category" },
           name: { $first: "$exam.name" },
           user: { $first: "$user._id" },
           questions: {
             $push: {
+              examId: "$examId",
               question: "$question.name",
               questionId: "$question.questionID",
               answer: "$answer",
+              category: "$question.questionCategory",
             },
           },
         },

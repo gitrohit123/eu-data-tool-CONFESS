@@ -28,6 +28,7 @@ export const config = {
     "/",
     "/login",
     "/signup",
+    "/dashboard",
     "/profile",
     "/admin/([^/.]*)",
     "/api/admin/([^/.]*)",

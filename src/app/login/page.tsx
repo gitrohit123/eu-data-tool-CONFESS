@@ -7,7 +7,7 @@ import { Input, Button, Image } from "@nextui-org/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/20/solid";
 import toast from "react-hot-toast";
 import useAuth from "@/context/auth";
-import LandingPage from "./LangingPage";
+import LandingPage from "@/app/login/LandingPage";
 
 type Props = {};
 
@@ -15,16 +15,14 @@ const Login = (props: Props) => {
   const router = useRouter();
   const [user, setUserData] = React.useState({ email: "", password: "" });
   const [isVisible, setIsVisible] = React.useState(false);
-  const { setUser } = useAuth();
+  const { setUser, firstVisit, setFirstVisit } = useAuth();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
 
-  const [showLandingPage, setShowLandingPage] = React.useState(true);
-
   const hideLandingPage = () => {
-    setShowLandingPage(false);
+    setFirstVisit(false);
   };
 
   const onLogin = async () => {
@@ -61,8 +59,8 @@ const Login = (props: Props) => {
 
   return (
     <div>
-      {showLandingPage ? (
-        <LandingPage onSelectPlan={hideLandingPage} />
+      {firstVisit ? (
+        <LandingPage onSelectPlan={hideLandingPage}/>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
           <Image width={300} alt="Logo" src="/logo.png" />
@@ -112,8 +110,7 @@ const Login = (props: Props) => {
           <Link href="/signup" className="text-slate-500">
             Not registered? Go to signup page.
           </Link>
-        </div>
-      )}
+        </div>)}
     </div>
   );
 };

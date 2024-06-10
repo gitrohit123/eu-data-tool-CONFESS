@@ -33,7 +33,7 @@ const MultiColorCircularProgress = ({ aligned, notAligned, notEligible }: Props)
       {segments.map((segment, index) => {
         const segmentLength = (segment.percentage / 100) * circumference;
         const dashArray = `${segmentLength} ${circumference - segmentLength}`;
-        const dashOffset = circumference - (cumulativePercentage / 100) * circumference;
+        const dashOffset = cumulativePercentage > 0 ? circumference - (cumulativePercentage / 100) * circumference : 0;
         cumulativePercentage += segment.percentage;
         return (
             <circle

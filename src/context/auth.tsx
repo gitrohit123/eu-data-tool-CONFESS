@@ -7,10 +7,13 @@ const AuthContext = createContext<any>({
   isAuthenticated: false,
   user: null,
   setUser: null,
+  firstVisit: true,
+  setFirstVisit: true,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
+  const [firstVisit, setFirstVisit] = useState(true);
   useEffect(() => {
     async function loadUserFromCookies() {
       const name = Cookies.get("name");
@@ -23,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loadUserFromCookies();
   }, []);
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, setUser }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, setUser, firstVisit, setFirstVisit }}>
       {children}
     </AuthContext.Provider>
   );
