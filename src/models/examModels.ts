@@ -8,7 +8,6 @@ const examSchema = new mongoose.Schema(
     },
     duration: {
       type: Number,
-      required: true,
     },
     category: {
       type: String,

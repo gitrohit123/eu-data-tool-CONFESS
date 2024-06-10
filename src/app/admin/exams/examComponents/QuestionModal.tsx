@@ -10,7 +10,7 @@ import {
   SelectItem,
   Select,
 } from "@nextui-org/react";
-import { MCQ } from "./questionType";
+import { MCQ, MultipleSelect } from "./questionType";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -99,6 +99,7 @@ export default function QuestionModal({
               <ModalBody>
                 <Input
                   isClearable
+                  isRequired
                   label="Question ID"
                   variant="bordered"
                   className="p-2 m-2  max-w-md"
@@ -111,6 +112,7 @@ export default function QuestionModal({
                 />
                 <Input
                   isClearable
+                  isRequired
                   label="Question"
                   variant="bordered"
                   className="p-2 m-2  max-w-md"
@@ -122,6 +124,7 @@ export default function QuestionModal({
                   }
                 />
                 <Select
+                  isRequired
                   label="Question Type"
                   variant="bordered"
                   className="p-2 m-2  max-w-md"
@@ -139,6 +142,12 @@ export default function QuestionModal({
                   </SelectItem>
                   <SelectItem key={"LongText"} value={"LongText"}>
                     Long Text
+                  </SelectItem>
+                  <SelectItem key={"NumericalValue"} value={"NumericalValue"}>
+                    Numerical Value
+                  </SelectItem>
+                  <SelectItem key={"MultipleSelect"} value={"MultipleSelect"}>
+                    Multiple Select
                   </SelectItem>
                   <SelectItem key={"Blank"} value={"Blank"}>
                     Blank
@@ -158,6 +167,9 @@ export default function QuestionModal({
                 />
                 {question.questionType === "MCQ" && (
                   <MCQ question={question} setQuestion={setQuestion} />
+                )}
+                {question.questionType === "MultipleSelect" && (
+                  <MultipleSelect question={question} setQuestion={setQuestion} />
                 )}
               </ModalBody>
               <ModalFooter>

@@ -2,9 +2,11 @@
 export const maxDuration = 50;
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Instructions from "../../admin/exams/examComponents/Instructions";
+import Instructions from "./Instructions";
 import {
   Button,
+  Checkbox,
+  CheckboxGroup,
   Input,
   Radio,
   RadioGroup,
@@ -12,7 +14,6 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { ClockIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import CenterSection from "@/components/CenterSection";
 
@@ -27,18 +28,12 @@ const WriteExam = ({ params }: Props) => {
   const [exam, setExam] = React.useState({
     name: "",
     questions: [],
-    duration: 0,
   });
   const [startScreen, setStartScreen] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState<any>();
   const [questions, setQuestions] = useState<any>([]);
   const [questionStack, setQuestionStack] = useState<any[]>([]);
-  const [timer, setTimer] = useState(0);
   const [onLoading, setOnLoading] = useState(true);
-
-  useEffect(() => {
-    setTimer(exam.duration);
-  }, [exam]);
 
   useEffect(() => {
     questions.forEach((question: any) => {
@@ -51,7 +46,6 @@ const WriteExam = ({ params }: Props) => {
 
   useEffect(() => {
     const getExam = async () => {
-      console.log("a");
       try {
         const examData = await axios(`/api/exams/${params.id}`);
         setExam(examData.data.data);
@@ -108,14 +102,14 @@ const WriteExam = ({ params }: Props) => {
             <div className="w-fit">
               <h1 className="text-3xl">Welcome to the Exam</h1>
               <h1 className="text-4xl">{exam.name}</h1>
-              <Instructions duration={exam.duration} />
+              <Instructions />
               <div className="flex flex-row w-full justify-between">
                 <Button
                   variant="ghost"
                   color="success"
                   onClick={() => startExam()}
                 >
-                  Start Exam
+                  Start Assessment
                 </Button>
                 <Button variant="ghost" onClick={() => router.push("/")}>
                   Cancel
@@ -129,14 +123,23 @@ const WriteExam = ({ params }: Props) => {
               </div>
               <div className="flex flex-col text-justify">
                 <h1 className="text-xl my-3">
-                  {
-                    <div
-                      className="mt-5"
-                      dangerouslySetInnerHTML={{
-                        __html: `${currentQuestion.name}`,
-                      }}
-                    />
-                  }
+                  <div
+                    className="mt-5"
+                    dangerouslySetInnerHTML={
+                      questionStack[questionStack.length - 1]?.questionType ===
+                        "MultipleSelect" &&
+                      questionStack[questionStack.length - 1]?.answer
+                        ? {
+                            __html: `${currentQuestion.name} <li>${
+                              questionStack[questionStack.length - 1]?.answer ||
+                              ""
+                            }</li><ul></div>`,
+                          }
+                        : {
+                            __html: `${currentQuestion.name}`,
+                          }
+                    }
+                  />
                 </h1>
                 {currentQuestion.questionType === "MCQ" ? (
                   <>
@@ -190,6 +193,52 @@ const WriteExam = ({ params }: Props) => {
                 ) : (
                   <></>
                 )}
+                {currentQuestion.questionType === "NumericalValue" ? (
+                  <>
+                    <Input
+                      type="number"
+                      value={currentQuestion.answer || ""}
+                      onChange={(e) =>
+                        setCurrentQuestion({
+                          ...currentQuestion,
+                          answer: e.target.value,
+                        })
+                      }
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+                {currentQuestion.questionType === "MultipleSelect" ? (
+                  <>
+                    <CheckboxGroup
+                      defaultValue={currentQuestion.answer?.split(",") || []}
+                      onChange={(e) =>
+                        setCurrentQuestion({
+                          ...currentQuestion,
+                          answer: e.toString(),
+                        })
+                      }
+                    >
+                      {Object.keys(JSON.parse(currentQuestion.options)).map(
+                        (option, index) => {
+                          return (
+                            <Checkbox
+                              key={index}
+                              value={
+                                JSON.parse(currentQuestion.options)[option]
+                              }
+                            >
+                              {option}
+                            </Checkbox>
+                          );
+                        }
+                      )}
+                    </CheckboxGroup>
+                  </>
+                ) : (
+                  <></>
+                )}
                 {currentQuestion.questionType === "LongText" ? (
                   <>
                     <Textarea
@@ -238,3 +287,5 @@ const WriteExam = ({ params }: Props) => {
 };
 
 export default WriteExam;
+
+export const dynamic = "force-dynamic";

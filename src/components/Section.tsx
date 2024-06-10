@@ -9,7 +9,7 @@ const Section = ({ children, className }: Props) => {
   return (
     <div
       className={
-        "flex pt-[70px] min-h-screen w-full px-24 " +
+        "flex flex-col pt-[70px] min-h-screen w-full px-24 sm:pb-[30px] md:pb-[100px] " +
         className
       }
     >
@@ -17,6 +17,5 @@ const Section = ({ children, className }: Props) => {
     </div>
   );
 };
-
 
 export default Section;

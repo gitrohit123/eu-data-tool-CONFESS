@@ -5,8 +5,10 @@ import Exam from "@/models/examModels";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
+import { connect } from "../../../dbConfig/dbConfig";
 
 type Props = {};
+connect();
 
 const Activities = async (props: Props) => {
   let exams: any = await Exam.find(
@@ -31,10 +33,6 @@ const Activities = async (props: Props) => {
       uid: "name",
     },
     {
-      name: "Duration",
-      uid: "duration",
-    },
-    {
       name: "Category",
       uid: "category",
     },
@@ -48,7 +46,7 @@ const Activities = async (props: Props) => {
     <Section className="flex-col">
       <Link href="/admin/exams/create" className="place-self-end">
         <Button color="success" variant="ghost">
-          Create Exam
+          Create Assessment
         </Button>
       </Link>
       <TableDisplay exams={exams} columns={columns} className="mt-[30px]" />
@@ -57,3 +55,4 @@ const Activities = async (props: Props) => {
 };
 
 export default Activities;
+export const dynamic = "force-dynamic";
