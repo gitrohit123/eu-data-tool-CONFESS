@@ -41,6 +41,12 @@ import toast from "react-hot-toast";
 
 type Props = {};
 
+type Activity = {
+  _id: string;
+  name: string;
+  category: string;
+  createdAt: string;
+};
 
 const TURNOVER_DEFAULT = 10000;
 const CAPEX_DEFAULT = 3000;
@@ -121,22 +127,23 @@ const Dashboard = (props: Props) => {
     } else {
 
       // Save new total financial metrics for user 
-        try {
-          setLoading(true);
-          toast("Saving...");
-          const newUserData = user; // TODO: Add new numbers
-          newUserData.totalActivities = totalActivities;
-          newUserData.totalTurnover = totalTurnover;
-          newUserData.totalCapEx = totalCapEx;
-          newUserData.totalOpEx = totalOpEx;
+      try {
+        setLoading(true);
+        toast("Saving...");
+        const newUserData = user; // TODO: Add new numbers
+        newUserData.totalActivities = totalActivities;
+        newUserData.totalTurnover = totalTurnover;
+        newUserData.totalCapEx = totalCapEx;
+        newUserData.totalOpEx = totalOpEx;
 
-          await axios.put(`/api/users/user/${user?._id}`, newUserData);
+        await axios.put(`/api/users/user/${user?._id}`, newUserData);
 
-        } catch (error: any) {
-          toast.error(error.message);
-        } finally {
-          setModalOpen(false);
-          setLoading(false);        }    
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setModalOpen(false);
+        setLoading(false);
+      }
 
     }
   };
@@ -359,22 +366,24 @@ const Dashboard = (props: Props) => {
           </div>
           <br />
 
-          {activityList.map((activity: any, index: number) => {
-            return (
-              <div key={activity.id || index}>
-                <ActivityDashboardCard
-                  activityName={"Activity " + (index + 1) + " - " + activity.name}
-                  substentialContribution={doesActivityMeetSC(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
-                  adaption={EvaluationResult.NOT_ASSESSABLE}
-                  water={doesActivityMeetWater(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
-                  circularEconomy={doesActivityMeetCE(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
-                  pollution={doesActivityMeetPollution(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
-                  biodiversity={doesActivityMeetBio(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
-                />
-                <br />
-              </div>
-            );
-          })}
+          {activityList
+            .sort((a: Activity, b: Activity) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+            .map((activity: any, index: number) => {
+              return (
+                <div key={activity.id || index}>
+                  <ActivityDashboardCard
+                    activityName={activity.category + " Activity " + (index + 1) + " - " + activity.name}
+                    substentialContribution={doesActivityMeetSC(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
+                    adaption={EvaluationResult.NOT_ASSESSABLE}
+                    water={doesActivityMeetWater(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
+                    circularEconomy={doesActivityMeetCE(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
+                    pollution={doesActivityMeetPollution(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
+                    biodiversity={doesActivityMeetBio(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
+                  />
+                  <br />
+                </div>
+              );
+            })}
         </div>
       )}
     </Section>

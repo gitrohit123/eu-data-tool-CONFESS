@@ -14,8 +14,8 @@ export function doesActivityMeetSC(activity: Activity): boolean {
     if (scQuestions.length === 0) {
         return false; // Default to true if there are no SC questions
     }
-    const allSCQuestionsWereAnsweredYes = scQuestions.every((question: Question) => question.answer === "Yes");
-    return allSCQuestionsWereAnsweredYes;
+    const atLeastOneSCQuestionAnsweredYes = scQuestions.some((question: Question) => question.answer.trim().toLowerCase() === "yes");
+    return atLeastOneSCQuestionAnsweredYes;
 }
 
 // DNSH - True if all categorized text boxes are filled out, or no questions of that category exist

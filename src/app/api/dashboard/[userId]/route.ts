@@ -47,6 +47,7 @@ export async function GET(
           "question.questionCategory": 1,
           answer: 1,
           examId: 1,
+          createdAt: 1,
         },
       },
       { $unwind: { path: "$exam" } },
@@ -58,6 +59,7 @@ export async function GET(
           category: { $first: "$exam.category" },
           name: { $first: "$exam.name" },
           user: { $first: "$user._id" },
+          createdAt: { $first: "$createdAt" },
           questions: {
             $push: {
               examId: "$examId",
