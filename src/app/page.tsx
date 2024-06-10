@@ -7,6 +7,13 @@ import { InformationCircleIcon } from "@heroicons/react/20/solid";
 
 connect();
 
+type Exam = {
+  _id: string;
+  name: string;
+  category: string;
+  createdAt: string;
+};
+
 export default async function Home() {
   const exams = await Exam.find({});
 
@@ -31,7 +38,7 @@ export default async function Home() {
           <h1>No Assessments are available</h1>
         ) : (
           <>
-            {exams.map((exam: any) => (
+            {exams.sort((a: Exam, b: Exam) => b.category.localeCompare(a.category)).map((exam: any) => (
               <Card
                 key={exam._id}
                 className="flex  flex-col items-center text-center justify-center h-full w-full  p-4 m-4 "
