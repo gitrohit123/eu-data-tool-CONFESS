@@ -374,7 +374,6 @@ const Dashboard = (props: Props) => {
                 <br />
               </div>
             );
-
           })}
         </div>
       )}

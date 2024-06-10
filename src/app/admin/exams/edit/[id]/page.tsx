@@ -20,4 +20,5 @@ const EditExam = async ({ params }: Props) => {
 };
 
 export default EditExam;
+
 export const dynamic = "force-dynamic";

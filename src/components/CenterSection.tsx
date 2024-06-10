@@ -8,7 +8,7 @@ type Props = {
 
 const CenterSection = ({ children, className }: Props) => {
     return (
-        <Section className={"place-content-center place-items-center text-center " + className}>
+        <Section className={"place-content-center place-items-center text-center  " + className}>
             {children}
         </Section>
     )

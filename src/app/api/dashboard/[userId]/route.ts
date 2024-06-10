@@ -3,7 +3,6 @@ import { connect } from "@/dbConfig/dbConfig";
 import Answer from "@/models/answerModels";
 import mongoose from "mongoose";
 
-
 connect();
 
 export async function GET(
@@ -76,5 +75,3 @@ export async function GET(
     return NextResponse.json({ error: error.message, status: 500 });
   }
 }
-
-

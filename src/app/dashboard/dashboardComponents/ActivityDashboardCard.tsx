@@ -5,7 +5,8 @@ import {
   Card,
   Divider,
   CardHeader
-} from "@nextui-org/react"; import Link from "next/link";
+} from "@nextui-org/react";
+import Link from "next/link";
 
 export enum EvaluationResult {
   MET = '#34a474',

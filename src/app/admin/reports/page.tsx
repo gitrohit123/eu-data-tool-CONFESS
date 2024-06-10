@@ -107,3 +107,5 @@ const Reports = (props: Props) => {
 };
 
 export default Reports;
+
+export const dynamic = 'force-dynamic';
