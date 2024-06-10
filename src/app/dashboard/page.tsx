@@ -35,7 +35,8 @@ import {
   getNotAlignedCapExSum,
   getAlignedCapExSum,
   getNotAlignedOpExSum,
-  getAlignedOpExSum
+  getAlignedOpExSum,
+  isActivityNotAligned
 } from "@/helpers/dashboardFunctions";
 import toast from "react-hot-toast";
 
@@ -78,7 +79,7 @@ const Dashboard = (props: Props) => {
   const opExNotEligibleActivitiesTotal = Math.max(0, totalOpEx - opExAlignedActivitiesTotal - opExNotAlignedActivitiesTotal);
 
   const totalAlignedActivitiesTotal = activityList.filter(doesActivityMeetAll).length;
-  const totalNotAlignedActivitiesTotal = activityList.filter(activity => !doesActivityMeetSC(activity)).length;
+  const totalNotAlignedActivitiesTotal = activityList.filter(activity => isActivityNotAligned(activity)).length;
   const totalNotEligibleActivitiesTotal = Math.max(0, totalActivities - totalAlignedActivitiesTotal - totalNotAlignedActivitiesTotal);
 
   useEffect(() => {
@@ -94,6 +95,19 @@ const Dashboard = (props: Props) => {
         const dashboardResponse = await axios.get("/api/dashboard/" + user._id);
         const activities = dashboardResponse.data.data;
         setActivities(activities);
+
+        activities
+          .sort((a: Activity, b: Activity) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())  
+          .map((activity: any, index: number) => {
+            console.log("Activity: " + index + " " + activity.name);
+            console.log("Does activity meet all conditions?", doesActivityMeetAll(activity));
+            console.log("Does activity meet SC?", doesActivityMeetSC(activity));
+            console.log("Does activity meet Adaption?", doesActivityMeetAdaptation(activity));
+            console.log("Does activity meet Water?", doesActivityMeetWater(activity));
+            console.log("Does activity meet Circular?", doesActivityMeetCE(activity));
+            console.log("Does activity meet Pollution?", doesActivityMeetPollution(activity));
+            console.log("Does activity meet Biodiversity?", doesActivityMeetBio(activity));
+          });
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {

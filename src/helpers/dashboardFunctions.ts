@@ -47,16 +47,14 @@ export const doesActivityMeetBio = (activity: Activity): boolean => {
 
 export const doesActivityMeetAll = (activity: Activity): boolean =>
     doesActivityMeetSC(activity) &&
-    doesActivityMeetAdaptation(activity) &&
     doesActivityMeetWater(activity) &&
     doesActivityMeetCE(activity) &&
     doesActivityMeetPollution(activity) &&
     doesActivityMeetBio(activity);
 
-const isActivityNotAligned = (activity: Activity): boolean =>
+export const isActivityNotAligned = (activity: Activity): boolean =>
     doesActivityMeetSC(activity) &&
-    !(doesActivityMeetAdaptation(activity) &&
-        doesActivityMeetWater(activity) &&
+    !(doesActivityMeetWater(activity) &&
         doesActivityMeetCE(activity) &&
         doesActivityMeetPollution(activity) &&
         doesActivityMeetBio(activity));
