@@ -30,12 +30,25 @@ export function doesActivityMeetCritera(activity: Activity, critera: string): bo
     if (critera === "Water") {
         const offshoreQuestion = relevantQuestions.find(
             (question) => question.question.toLowerCase().includes("is your plant offshore?")
-          );
-          const isOffshore = offshoreQuestion?.answer.trim().toLowerCase() === "yes";
-          const allWaterQuestionsAnsweredYes = relevantQuestions
+        );
+        const isOffshore = offshoreQuestion?.answer.trim().toLowerCase() === "yes";
+        const allWaterQuestionsAnsweredYes = relevantQuestions
             .every((question) => question.answer.trim().toLowerCase() === "yes");
-          
-          return !isOffshore || (isOffshore && allWaterQuestionsAnsweredYes);
+
+        return !isOffshore || (isOffshore && allWaterQuestionsAnsweredYes);
+    }
+
+    // TODO: Remove this temporary workaround for Adaptation
+    if (critera === "Adaptation") {
+        const relevantAdaptationQuestions = relevantQuestions.filter(question =>
+            question.question.toLowerCase().includes("describe how the risks mentioned above may impact your activity") ||
+            question.question.toLowerCase().includes("describe what adaptations you could consider for your activity")
+          );
+
+        const allRelevantAdapationQuestionsAnswered = relevantAdaptationQuestions
+            .every((question) => question.answer !== "result");
+
+        return allRelevantAdapationQuestionsAnswered;
     }
 
     return allRelevantQuestionsWereAnsweredYes;
