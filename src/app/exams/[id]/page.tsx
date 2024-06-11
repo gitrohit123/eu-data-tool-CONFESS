@@ -76,10 +76,8 @@ const WriteExam = ({ params }: Props) => {
       const nextQuestion = questions.find(
         (question: any) => question.questionID === nextQuestionID
       );
-      //setCurrentQuestion({ ...nextQuestion});
-      setCurrentQuestion({ ...nextQuestion, answer: "" });
+      setCurrentQuestion({ ...nextQuestion, answer: ""});
     }
-    console.log("currentQuestion ", currentQuestion.answer);
   };
 
   const submitExam = async () => {
