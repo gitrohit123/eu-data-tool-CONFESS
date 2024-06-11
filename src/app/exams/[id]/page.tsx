@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import CenterSection from "@/components/CenterSection";
-import  { getCategoryDisplayString } from "@/helpers/categoryHelper";
+import { getCategoryDisplayString } from "@/helpers/categoryHelper";
 
 type Props = {
   params: {
@@ -71,12 +71,12 @@ const WriteExam = ({ params }: Props) => {
       questionStack.push(currentQuestion);
       const nextQuestionID =
         currentQuestion.nextQuestion[
-          currentQuestion.selectedOption?.index || 0
+        currentQuestion.selectedOption?.index || 0
         ];
       const nextQuestion = questions.find(
         (question: any) => question.questionID === nextQuestionID
       );
-      setCurrentQuestion({ ...nextQuestion, answer: ""});
+      setCurrentQuestion({ ...nextQuestion, answer: "" });
     }
   };
 
@@ -130,16 +130,21 @@ const WriteExam = ({ params }: Props) => {
                     dangerouslySetInnerHTML={
                       questionStack[questionStack.length - 1]?.questionType ===
                         "MultipleSelect" &&
-                      questionStack[questionStack.length - 1]?.answer
+                        questionStack[questionStack.length - 1]?.answer
                         ? {
-                            __html: `${currentQuestion.name} <li>${
-                              questionStack[questionStack.length - 1]?.answer ||
-                              ""
-                            }</li><ul></div>`,
-                          }
+                          __html: `
+                            ${currentQuestion.name}
+                              ${questionStack[questionStack.length - 1]?.answer
+                              .split(';')
+                              .map((answer: String) => answer.trim())
+                              .filter((answer: String) => answer !== '')
+                              .map((answer: String) => `<li>${answer}</li>`)
+                              .join('')}
+                          `,
+                        } 
                         : {
-                            __html: `${currentQuestion.name}`,
-                          }
+                          __html: `${currentQuestion.name}`,
+                        }
                     }
                   />
                 </h1>
@@ -149,7 +154,7 @@ const WriteExam = ({ params }: Props) => {
                       className="mt-5"
                       defaultValue={
                         currentQuestion.options[
-                          currentQuestion.selectedOption?.value
+                        currentQuestion.selectedOption?.value
                         ]
                       }
                     >
@@ -214,11 +219,11 @@ const WriteExam = ({ params }: Props) => {
                 {currentQuestion.questionType === "MultipleSelect" ? (
                   <>
                     <CheckboxGroup
-                      defaultValue={currentQuestion.answer?.split(",") || []}
-                      onChange={(e) =>
+                      defaultValue={currentQuestion.answer?.split(";") || []}
+                      onChange={(values) =>
                         setCurrentQuestion({
                           ...currentQuestion,
-                          answer: e.toString(),
+                          answer: values.join(';'),
                         })
                       }
                     >
