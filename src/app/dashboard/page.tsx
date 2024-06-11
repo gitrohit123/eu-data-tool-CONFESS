@@ -96,18 +96,6 @@ const Dashboard = (props: Props) => {
         const activities = dashboardResponse.data.data;
         setActivities(activities);
 
-        activities
-          .sort((a: Activity, b: Activity) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())  
-          .map((activity: any, index: number) => {
-            console.log("Activity: " + index + " " + activity.name);
-            console.log("Does activity meet all conditions?", doesActivityMeetAll(activity));
-            console.log("Does activity meet SC?", doesActivityMeetSC(activity));
-            console.log("Does activity meet Adaption?", doesActivityMeetAdaptation(activity));
-            console.log("Does activity meet Water?", doesActivityMeetWater(activity));
-            console.log("Does activity meet Circular?", doesActivityMeetCE(activity));
-            console.log("Does activity meet Pollution?", doesActivityMeetPollution(activity));
-            console.log("Does activity meet Biodiversity?", doesActivityMeetBio(activity));
-          });
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -388,7 +376,7 @@ const Dashboard = (props: Props) => {
                   <ActivityDashboardCard
                     activityName={activity.category + " Activity " + (index + 1) + " - " + activity.name}
                     substentialContribution={doesActivityMeetSC(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
-                    adaption={EvaluationResult.NOT_ASSESSABLE}
+                    adaption={doesActivityMeetAdaptation(activity) ? EvaluationResult.NOT_ASSESSABLE : EvaluationResult.NOT_MET}
                     water={doesActivityMeetWater(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
                     circularEconomy={doesActivityMeetCE(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
                     pollution={doesActivityMeetPollution(activity) ? EvaluationResult.MET : EvaluationResult.NOT_MET}
