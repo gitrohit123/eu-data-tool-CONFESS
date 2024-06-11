@@ -25,6 +25,19 @@ export function doesActivityMeetCritera(activity: Activity, critera: string): bo
         return true; // Default to true if there are no relevant questions of that criteria
     }
     const allRelevantQuestionsWereAnsweredYes = relevantQuestions.every((question: Question) => question.answer !== "result");
+
+    // TODO: Remove this temporary workaround for Water
+    if (critera === "Water") {
+        const offshoreQuestion = relevantQuestions.find(
+            (question) => question.question.toLowerCase().includes("is your plant offshore?")
+          );
+          const isOffshore = offshoreQuestion?.answer.trim().toLowerCase() === "yes";
+          const allWaterQuestionsAnsweredYes = relevantQuestions
+            .every((question) => question.answer.trim().toLowerCase() === "yes");
+          
+          return !isOffshore || (isOffshore && allWaterQuestionsAnsweredYes);
+    }
+
     return allRelevantQuestionsWereAnsweredYes;
 }
 
